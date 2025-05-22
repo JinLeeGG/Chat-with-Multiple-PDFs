@@ -2,7 +2,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings
+from langchain.embeddings import OpenAIEmbeddings, HuggingFaceBgeEmbeddings
 from langchain.vectorstores import FAISS
 
 
@@ -28,7 +28,8 @@ def get_text_chunks(text):
 
 
 def get_vectorstore(text_chucks):
-    embeddings = OpenAIEmbeddings()
+    # embeddings = OpenAIEmbeddings()
+    embeddings = HuggingFaceBgeEmbeddings(model_name="hkunlp/instructor-xl")
     vectorstore = FAISS.from_texts(texts=text_chucks, embedding=embeddings)
     return vectorstore
 
@@ -54,6 +55,8 @@ def main():
                 
                 # create vector store
                 vectorstore = get_vectorstore(text_chucks)
+                
+                st.write(text_chucks)                         
 
 
 if __name__ == '__main__':
