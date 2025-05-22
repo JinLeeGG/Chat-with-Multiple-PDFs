@@ -7,7 +7,8 @@ def main():
     st.header("Chat with multiple PDFs :books:")
     st.text_input("Ask a question about your document") # lable on top of user input
 
-    with st.sidebar:
+    # Sidebar
+    with st.sidebar:  
         st.subheader("your document")
         st.file_uploader("Upload your PDFs here and click on 'Process")
         st.button("Process")
