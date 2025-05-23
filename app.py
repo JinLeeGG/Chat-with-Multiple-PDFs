@@ -46,6 +46,18 @@ def get_conversation_chain(vectorstore):
     )
     return conversation_chain
 
+def handle_userinput(user_question):
+    response = st.session_state.conversation({'question' : user_question})
+    st.session_state.chat_history = response['chat_history']
+
+    for i, message in enumerate(st.session_state.chat_history):
+        if i & 2 == 0:
+            st.write(user_template.replace("{{MSG}}", message.content), unsafe_allow_html=True) 
+        else:
+            st.write(bot_template.replace("{{MSG}}", message.content), unsafe_allow_html=True) 
+
+
+
 def main():
     load_dotenv()
     st.set_page_config(page_title="Chat with multiple PDFs",
@@ -55,12 +67,13 @@ def main():
 
     if "conversation" not in st.session_state:
         st.session_state.converstion = None
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = None
 
     st.header("Chat with multiple PDFs :books:")
-    st.text_input("Ask a question about your document") # lable on top of user input
-
-    st.write(user_template.replace("{{MSG}}", "hello Robot"), unsafe_allow_html=True) # show the html inside of it 
-    st.write(bot_template.replace("{{MSG}}", "hello human"), unsafe_allow_html=True) 
+    user_question = st.text_input("Ask a question about your document") # lable on top of user input
+    if user_question:
+        handle_userinput(user_question)
 
     # Sidebar
     with st.sidebar:  
@@ -81,7 +94,7 @@ def main():
                 # create conversation chain
                 st.session_state.conversation = get_conversation_chain(vectorstore)
 
-                st.write(text_chucks)
+                st.write("Processing Finished")
 
 
 
