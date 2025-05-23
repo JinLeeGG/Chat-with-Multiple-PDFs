@@ -2,12 +2,13 @@ import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings, HuggingFaceBgeEmbeddings
+from langchain.embeddings import OpenAIEmbeddings, HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
-from langchain.llms import HuggingFaceHub
+from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from htmlTemplates import css, bot_template, user_template
+from langchain.llms import HuggingFaceHub
 
 def get_pdf_text(pdf_docs):
     text = "" # storing all texts from pdfs
@@ -31,24 +32,23 @@ def get_text_chunks(text):
 
 
 def get_vectorstore(text_chucks):
-    # embeddings = OpenAIEmbeddings()
-    embeddings = HuggingFaceBgeEmbeddings(model_name="hkunlp/instructor-xl")
+    embeddings = OpenAIEmbeddings()
+    # embeddings = HuggingFaceEmbeddings(model_name="hkunlp/instructor-xl")
     vectorstore = FAISS.from_texts(texts=text_chucks, embedding=embeddings)
     return vectorstore
 
 def get_conversation_chain(vectorstore):
-    llm = HuggingFaceHub(
-        repo_id="google/flan-t5-xl",
-        model_kwargs={"temperature": 0.5, "max_new_tokens": 512}
-    )
-    memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
+    llm = ChatOpenAI()
+    # llm = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature":0.5, "max_length":512})
+
+    memory = ConversationBufferMemory(
+        memory_key='chat_history', return_messages=True)
     conversation_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=vectorstore.as_retriever(),
         memory=memory
     )
     return conversation_chain
-
 
 def handle_userinput(user_question):
     response = st.session_state.conversation({'question' : user_question})
