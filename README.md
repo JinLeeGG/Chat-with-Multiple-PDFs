@@ -78,7 +78,7 @@ A powerful chatbot application that allows users to upload multiple PDF document
 
 ## Demo
 
-![Demo GIF](demo.gif)
+![Demo GIF](demo/chatwithpdf_demo.gif)
 
 *Add your demo GIF file to showcase the application in action*
 
