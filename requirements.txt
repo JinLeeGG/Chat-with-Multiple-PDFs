@@ -6,5 +6,6 @@ openai
 faiss-cpu
 altair
 tiktoken
+langchain-community
 
 python = 3.10.11
