@@ -6,3 +6,5 @@ openai
 faiss-cpu
 altair
 tiktoken
+
+python = 3.10.11
