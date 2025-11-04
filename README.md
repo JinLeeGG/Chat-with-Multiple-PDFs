@@ -9,7 +9,7 @@ A powerful chatbot application that allows users to upload multiple PDF document
 - 🔍 **Intelligent Search**: Uses vector embeddings for accurate content retrieval
 - 🤖 **OpenAI Integration**: Powered by OpenAI's language models for contextual responses
 - 📊 **User-Friendly Interface**: Clean and intuitive Streamlit web interface
-
+ 
 ## Technology Stack
 
 - **LangChain**: Framework for building LLM applications
